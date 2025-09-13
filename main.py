@@ -28,8 +28,3 @@ for commands in command:
         logger.exception(f"Failed to load {commands}.", exc_info=e)
 
 bot.start()
-
-@listen()
-async def on_shutdown():
-    await pool.close()
-    logger.info(f"Logged out")
