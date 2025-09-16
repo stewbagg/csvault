@@ -14,7 +14,6 @@ class Case(Extension):
     async def case(self, ctx: SlashContext, name: str):
         embed = await build_embed("cases", name)
         await ctx.send(embed=embed)
-    
     @case.autocomplete("name")
     async def case_autocomplete(self, ctx: AutocompleteContext):
         input = ctx.input_text or ""
