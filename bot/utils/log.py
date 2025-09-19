@@ -1,5 +1,6 @@
 import logging
 
+
 class CustomFormatter(logging.Formatter):
     """Custom formatter class"""
 
@@ -10,19 +11,20 @@ class CustomFormatter(logging.Formatter):
     bold_red = "\x1b[31;1m"
     reset = "\x1b[0m"
 
-    FORMATS = (
-        {
-            logging.INFO: grey + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
-            logging.WARNING: yellow + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
-            logging.ERROR: red + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
-            logging.CRITICAL: bold_red + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
-        }
-    )
+    FORMATS = {
+        logging.INFO: grey + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
+        logging.WARNING: yellow + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
+        logging.ERROR: red + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
+        logging.CRITICAL: bold_red
+        + "[%(asctime)s][%(levelname)7s] %(message)s"
+        + reset,
+    }
 
     def format(self, record):
         log_fmt = self.FORMATS.get(record.levelno)
         formatter = logging.Formatter(log_fmt, datefmt="%I:%M.%S%p")
         return formatter.format(record)
+
 
 def get_logger(name):
     """Function to get a logger
@@ -44,3 +46,4 @@ def init_logger(name="root"):
     __ch.setFormatter(CustomFormatter())
     __logger.addHandler(__ch)
     return __logger
+

@@ -10,23 +10,23 @@ from interactions import (
 )
 
 
-class Case(Extension):
-    @slash_command(name="case", description="View a Counter-Strike Case")
+class Package(Extension):
+    @slash_command(name="package", description="View a Counter-Strike Package")
     @slash_option(
         name="name",
-        description="Case Name",
+        description="Package Name",
         required=True,
         opt_type=OptionType.STRING,
         autocomplete=True,
     )
-    async def case(self, ctx: SlashContext, name: str):
-        embed = await build_embed("cases", name)
+    async def package(self, ctx: SlashContext, name: str):
+        embed = await build_embed("packages", name)
         await ctx.send(embed=embed)
 
-    @case.autocomplete("name")
-    async def case_autocomplete(self, ctx: AutocompleteContext):
+    @package.autocomplete("name")
+    async def package_autocomplete(self, ctx: AutocompleteContext):
         input = ctx.input_text or ""
-        choices = await get_choices("cases", input)
+        choices = await get_choices("packages", input)
         await ctx.send(
             choices=[{"name": choice.name, "value": choice.name} for choice in choices]
         )
