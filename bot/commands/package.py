@@ -1,5 +1,5 @@
 from bot.utils.db import get_choices
-from bot.utils.embeds import build_embed
+from bot.utils.embed import build_embed
 from interactions import (
     AutocompleteContext,
     Extension,
@@ -11,6 +11,11 @@ from interactions import (
 
 
 class Package(Extension):
+    """Represents the /package command.
+
+    Retrieves all info for a Counter-Strike package, handles choice autocomplete, and calls the Discord embeded message.
+    """
+
     @slash_command(name="package", description="View a Counter-Strike Package")
     @slash_option(
         name="name",
@@ -20,11 +25,21 @@ class Package(Extension):
         autocomplete=True,
     )
     async def package(self, ctx: SlashContext, name: str):
+        """Get the embeded Discord message for a package.
+
+        Builds the Discord embeded message for a Counter-Strike package.
+        """
+
         embed = await build_embed("packages", name)
         await ctx.send(embed=embed)
 
     @package.autocomplete("name")
     async def package_autocomplete(self, ctx: AutocompleteContext):
+        """Get autocomplete choices for Counter-Strike packages.
+
+        Searches the package table for names that match the user's input of a Counter-Strike package.
+        """
+
         input = ctx.input_text or ""
         choices = await get_choices("packages", input)
         await ctx.send(

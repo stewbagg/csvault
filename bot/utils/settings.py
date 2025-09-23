@@ -7,7 +7,7 @@ logger = init_logger(path.basename(__file__))
 
 
 class Settings(BaseSettings):
-    """Discord bot and PostgreSQL database settings.
+    """Represents bot and database settings.
 
     Fetches Psycopg3 database connection info and Interactions-py bot credentials from .env using Pydantic.
 

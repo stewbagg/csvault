@@ -1,5 +1,4 @@
-import atexit
-from bot.utils.config import settings, logger
+from bot.utils.settings import settings, logger
 from bot.utils.db import pool
 from interactions import Activity, ActivityType, Client, errors, listen
 from os import listdir

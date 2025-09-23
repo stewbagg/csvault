@@ -1,4 +1,4 @@
-from bot.utils.config import logger, settings
+from bot.utils.settings import logger, settings
 from datetime import date
 from psycopg_pool import AsyncConnectionPool
 from psycopg.rows import class_row
@@ -14,12 +14,7 @@ def conninfo():
         str: The database connection string formatted for Psycopg3.
     """
 
-    return f"""
-    dbname={settings.db_name}
-    user={settings.db_user}
-    host={settings.db_host}
-    password={settings.db_pass}
-    """
+    return f"dbname={settings.db_name} user={settings.db_user} host={settings.db_host} password={settings.db_pass}"
 
 
 class Choice(BaseModel):
