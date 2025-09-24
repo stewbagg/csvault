@@ -1,4 +1,9 @@
-from bot.utils.settings import logger, settings
+"""Database helper for Counter-Strike Discord bot.
+
+Defines database connection, handling, and queries used for the bot.
+"""
+
+from bot.utils.settings import settings
 from datetime import date
 from psycopg_pool import AsyncConnectionPool
 from psycopg.rows import class_row
@@ -41,14 +46,14 @@ class Metadata(BaseModel):
         packages (str): The item’s package names.
     """
 
-    id: int | None = None
-    name: str | None = None
-    release_date: date | None = None
-    icon_url: str | None = None
-    case_name: str | None = None
-    collection_id: int | None = None
-    collection_name: str | None = None
-    packages: str | None = None
+    id: int or None = None
+    name: str or None = None
+    release_date: date or None = None
+    icon_url: str or None = None
+    case_name: str or None = None
+    collection_id: int or None = None
+    collection_name: str or None = None
+    packages: str or None = None
 
 
 class Item(BaseModel):

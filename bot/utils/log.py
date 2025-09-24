@@ -1,3 +1,8 @@
+"""Log helper for Counter-Strike Discord bot.
+
+Defines the logger and formatting used for logging the bot.
+"""
+
 import logging
 
 
@@ -46,4 +51,3 @@ def init_logger(name="root"):
     __ch.setFormatter(CustomFormatter())
     __logger.addHandler(__ch)
     return __logger
-

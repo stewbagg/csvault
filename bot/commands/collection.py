@@ -1,5 +1,11 @@
+"""Collection command for Counter-Strike Discord bot.
+
+Defines the /collection command, including autocomplete and embed handling.
+"""
+
 from bot.utils.db import get_choices
 from bot.utils.embed import build_embed
+from bot.utils.settings import logger
 from interactions import (
     AutocompleteContext,
     Extension,
@@ -32,6 +38,7 @@ class Collection(Extension):
 
         embed = await build_embed("collections", name)
         await ctx.send(embed=embed)
+        logger.info(f"{ctx.author} viewed a collection")
 
     @collection.autocomplete("name")
     async def collection_autocomplete(self, ctx: AutocompleteContext):

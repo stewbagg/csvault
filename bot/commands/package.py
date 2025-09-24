@@ -1,5 +1,11 @@
+"""Package command for Counter-Strike Discord bot.
+
+Defines the /package command, including autocomplete and embed handling.
+"""
+
 from bot.utils.db import get_choices
 from bot.utils.embed import build_embed
+from bot.utils.settings import logger
 from interactions import (
     AutocompleteContext,
     Extension,
@@ -32,6 +38,7 @@ class Package(Extension):
 
         embed = await build_embed("packages", name)
         await ctx.send(embed=embed)
+        logger.info(f"{ctx.author} viewed a package")
 
     @package.autocomplete("name")
     async def package_autocomplete(self, ctx: AutocompleteContext):

@@ -1,3 +1,5 @@
+"""Unit tests for the database helper of the Counter-Strike Discord bot."""
+
 import pytest
 import pytest_asyncio
 

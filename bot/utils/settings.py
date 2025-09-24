@@ -1,3 +1,8 @@
+"""Settings helper for Counter-Strike Discord bot.
+
+Defines the settings used for the database and bot.
+"""
+
 from bot.utils.log import init_logger
 from os import path
 from pydantic_settings import BaseSettings, SettingsConfigDict

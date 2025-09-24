@@ -1,3 +1,8 @@
+"""Embed helper for Counter-Strike Discord bot.
+
+Defines embed data, handling, and formatting used for the bot.
+"""
+
 from bot.utils.db import get_metadata, get_items
 from interactions import Embed
 

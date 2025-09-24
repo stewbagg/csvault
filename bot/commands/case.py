@@ -1,5 +1,11 @@
+"""Case command for Counter-Strike Discord bot.
+
+Defines the /case command, including autocomplete and embed handling.
+"""
+
 from bot.utils.db import get_choices
 from bot.utils.embed import build_embed
+from bot.utils.settings import logger
 from interactions import (
     AutocompleteContext,
     Extension,
@@ -32,6 +38,7 @@ class Case(Extension):
 
         embed = await build_embed("cases", name)
         await ctx.send(embed=embed)
+        logger.info(f"{ctx.author} viewed a case")
 
     @case.autocomplete("name")
     async def case_autocomplete(self, ctx: AutocompleteContext):
@@ -39,6 +46,7 @@ class Case(Extension):
 
         Searches the case table for names that match the user's input of a Counter-Strike case.
         """
+
         input = ctx.input_text or ""
         choices = await get_choices("cases", input)
         await ctx.send(

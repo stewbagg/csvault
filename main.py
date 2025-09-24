@@ -1,3 +1,8 @@
+"""Main entry point for Counter-Strike Discord bot.
+
+Defines the startup and command list for the bot.
+"""
+
 from bot.utils.settings import settings, logger
 from bot.utils.db import pool
 from interactions import Activity, ActivityType, Client, errors, listen
@@ -13,6 +18,7 @@ bot = Client(
 async def on_startup():
     await pool.open()
     logger.info(f"Logged in as {bot.user}")
+    logger.info("-------------------------")
 
 
 command = [
