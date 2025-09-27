@@ -47,3 +47,13 @@ class TestEmbed:
 
         garbage = await build_embed("packages", "Random")
         assert garbage is None
+
+    @pytest.mark.asyncio
+    async def test_skin_embed(self):
+        embed = await build_embed("skins", "AK-47 | Case Hardened")
+        assert embed
+        assert embed.title == "AK-47 | Case Hardened"
+        assert "Classified" in embed.description
+
+        garbage = await build_embed("skins", "Random")
+        assert garbage is None

@@ -44,7 +44,7 @@ class Package(Extension):
     async def package_autocomplete(self, ctx: AutocompleteContext):
         """Get autocomplete choices for Counter-Strike packages.
 
-        Searches the package table for names that match the user's input of a Counter-Strike package.
+        Searches the packages table for names that match the user's input of a Counter-Strike package.
         """
 
         input = ctx.input_text or ""

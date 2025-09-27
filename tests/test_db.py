@@ -46,6 +46,17 @@ class TestDB:
         assert garbage_choices == []
 
     @pytest.mark.asyncio
+    async def test_get_skins_choices(self):
+        choices = await get_choices("skins", "")
+        assert choices
+
+        fragment_choices = await get_choices("skins", "AK")
+        assert any("ak" in choice.name.lower() for choice in fragment_choices)
+
+        garbage_choices = await get_choices("skins", "Random")
+        assert garbage_choices == []
+
+    @pytest.mark.asyncio
     async def test_get_case_items(self):
         items = await get_items("cases", 1)
         assert items
@@ -73,13 +84,22 @@ class TestDB:
         assert garbage_items == []
 
     @pytest.mark.asyncio
+    async def test_get_skin(self):
+        item = await get_items("skins", 6)
+        assert item
+        assert "Restricted" in item.grade
+
+        garbage_items = await get_items("skins", 0)
+        assert garbage_items == None
+
+    @pytest.mark.asyncio
     async def test_get_case_metadata(self):
         metadata = await get_metadata("cases", "CS:GO Weapon Case")
         assert metadata
         assert "The Arms Deal Collection" in metadata.collection_name
 
         garbage_metadata = await get_metadata("cases", "Random")
-        assert garbage_metadata is None
+        assert garbage_metadata == None
 
     @pytest.mark.asyncio
     async def test_get_collection_metadata(self):
@@ -88,7 +108,7 @@ class TestDB:
         assert "CS:GO Weapon Case" in metadata.case_name
 
         garbage_metadata = await get_metadata("collections", "Random")
-        assert garbage_metadata is None
+        assert garbage_metadata == None
 
     @pytest.mark.asyncio
     async def test_get_package_metadata(self):
@@ -99,4 +119,13 @@ class TestDB:
         assert "The Inferno Collection" in metadata.collection_name
 
         garbage_metadata = await get_metadata("packages", "Random")
-        assert garbage_metadata is None
+        assert garbage_metadata == None
+
+    @pytest.mark.asyncio
+    async def test_get_skin_metadata(self):
+        metadata = await get_metadata("skins", "AK-47 | Case Hardened")
+        assert metadata
+        assert "The Arms Deal Collection" in metadata.collection_name
+
+        garbage_metadata = await get_metadata("skins", "Random")
+        assert garbage_metadata == None

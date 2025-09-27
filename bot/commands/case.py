@@ -44,7 +44,7 @@ class Case(Extension):
     async def case_autocomplete(self, ctx: AutocompleteContext):
         """Get autocomplete choices for Counter-Strike cases.
 
-        Searches the case table for names that match the user's input of a Counter-Strike case.
+        Searches the cases table for names that match the user's input of a Counter-Strike case.
         """
 
         input = ctx.input_text or ""

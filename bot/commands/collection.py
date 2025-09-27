@@ -44,7 +44,7 @@ class Collection(Extension):
     async def collection_autocomplete(self, ctx: AutocompleteContext):
         """Get autocomplete choices for Counter-Strike collections.
 
-        Searches the collection table for names that match the user's input of a Counter-Strike collection.
+        Searches the collections table for names that match the user's input of a Counter-Strike collection.
         """
 
         input = ctx.input_text or ""
