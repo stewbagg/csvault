@@ -13,6 +13,17 @@ async def db_pool():
 
 class TestDB:
     @pytest.mark.asyncio
+    async def test_get_agent_choices(self):
+        choices = await get_choices("agents", "")
+        assert choices
+
+        fragment_choices = await get_choices("agents", "Cr")
+        assert any("cr" in choice.name.lower() for choice in fragment_choices)
+
+        garbage_choices = await get_choices("agents", "Random")
+        assert garbage_choices == []
+
+    @pytest.mark.asyncio
     async def test_get_case_choices(self):
         choices = await get_choices("cases", "")
         assert choices
@@ -40,7 +51,9 @@ class TestDB:
         assert choices
 
         fragment_choices = await get_choices("packages", "2013")
-        assert any("2013" in choice.name.lower() for choice in fragment_choices)
+        assert any(
+            "2013" in choice.name.lower() for choice in fragment_choices
+        )
 
         garbage_choices = await get_choices("packages", "Random")
         assert garbage_choices == []
@@ -55,6 +68,15 @@ class TestDB:
 
         garbage_choices = await get_choices("skins", "Random")
         assert garbage_choices == []
+
+    @pytest.mark.asyncio
+    async def test_get_agent(self):
+        item = await get_items("agents", 2)
+        assert item
+        assert "Exceptional" in item.grade
+
+        garbage_items = await get_items("agents", 0)
+        assert garbage_items is None
 
     @pytest.mark.asyncio
     async def test_get_case_items(self):
@@ -78,7 +100,9 @@ class TestDB:
     async def test_get_package_items(self):
         items = await get_items("packages", 6)
         assert items
-        assert any("Dual Berettas | Anodized Navy" in item.name for item in items)
+        assert any(
+            "Dual Berettas | Anodized Navy" in item.name for item in items
+        )
 
         garbage_items = await get_items("packages", 0)
         assert garbage_items == []
@@ -90,7 +114,18 @@ class TestDB:
         assert "Restricted" in item.grade
 
         garbage_items = await get_items("skins", 0)
-        assert garbage_items == None
+        assert garbage_items is None
+
+    @pytest.mark.asyncio
+    async def test_get_agent_metadata(self):
+        metadata = await get_metadata(
+            "agents", "Col. Mangos Dabisi | Guerrilla Warfare"
+        )
+        assert metadata
+        assert "The Operation Riptide Collection" in metadata.collection_name
+
+        garbage_metadata = await get_metadata("agents", "Random")
+        assert garbage_metadata is None
 
     @pytest.mark.asyncio
     async def test_get_case_metadata(self):
@@ -99,16 +134,18 @@ class TestDB:
         assert "The Arms Deal Collection" in metadata.collection_name
 
         garbage_metadata = await get_metadata("cases", "Random")
-        assert garbage_metadata == None
+        assert garbage_metadata is None
 
     @pytest.mark.asyncio
     async def test_get_collection_metadata(self):
-        metadata = await get_metadata("collections", "The Arms Deal Collection")
+        metadata = await get_metadata(
+            "collections", "The Arms Deal Collection"
+        )
         assert metadata
         assert "CS:GO Weapon Case" in metadata.case_name
 
         garbage_metadata = await get_metadata("collections", "Random")
-        assert garbage_metadata == None
+        assert garbage_metadata is None
 
     @pytest.mark.asyncio
     async def test_get_package_metadata(self):
@@ -119,7 +156,7 @@ class TestDB:
         assert "The Inferno Collection" in metadata.collection_name
 
         garbage_metadata = await get_metadata("packages", "Random")
-        assert garbage_metadata == None
+        assert garbage_metadata is None
 
     @pytest.mark.asyncio
     async def test_get_skin_metadata(self):
@@ -128,4 +165,4 @@ class TestDB:
         assert "The Arms Deal Collection" in metadata.collection_name
 
         garbage_metadata = await get_metadata("skins", "Random")
-        assert garbage_metadata == None
+        assert garbage_metadata is None

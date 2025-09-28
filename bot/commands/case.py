@@ -3,23 +3,25 @@
 Defines the /case command, including autocomplete and embed handling.
 """
 
-from bot.utils.db import get_choices
-from bot.utils.embed import build_embed
-from bot.utils.settings import logger
 from interactions import (
     AutocompleteContext,
     Extension,
     OptionType,
+    SlashContext,
     slash_command,
     slash_option,
-    SlashContext,
 )
+
+from bot.utils.db import get_choices
+from bot.utils.embed import build_embed
+from bot.utils.settings import logger
 
 
 class Case(Extension):
     """Represents the /case command.
 
-    Retrieves all info for a Counter-Strike case, handles choice autocomplete, and calls the Discord embeded message.
+    Retrieves all info for a Counter-Strike case, handles
+    choice autocomplete, and calls the Discord embeded message.
     """
 
     @slash_command(name="case", description="View a Counter-Strike Case")
@@ -44,11 +46,15 @@ class Case(Extension):
     async def case_autocomplete(self, ctx: AutocompleteContext):
         """Get autocomplete choices for Counter-Strike cases.
 
-        Searches the cases table for names that match the user's input of a Counter-Strike case.
+        Searches the cases table for names that match
+        the user's input of a Counter-Strike case.
         """
 
         input = ctx.input_text or ""
         choices = await get_choices("cases", input)
         await ctx.send(
-            choices=[{"name": choice.name, "value": choice.name} for choice in choices]
+            choices=[
+                {"name": choice.name, "value": choice.name}
+                for choice in choices
+            ]
         )

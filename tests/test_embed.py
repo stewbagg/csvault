@@ -14,6 +14,18 @@ async def db_pool():
 
 class TestEmbed:
     @pytest.mark.asyncio
+    async def test_agent_embed(self):
+        embed = await build_embed(
+            "agents", "Col. Mangos Dabisi | Guerrilla Warfare"
+        )
+        assert embed
+        assert embed.title == "Col. Mangos Dabisi | Guerrilla Warfare"
+        assert "Exceptional" in embed.description
+
+        garbage = await build_embed("agents", "Random")
+        assert garbage is None
+
+    @pytest.mark.asyncio
     async def test_case_embed(self):
         embed = await build_embed("cases", "CS:GO Weapon Case")
         assert embed

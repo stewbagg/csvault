@@ -3,23 +3,25 @@
 Defines the /skin command, including autocomplete and embed handling.
 """
 
-from bot.utils.db import get_choices
-from bot.utils.embed import build_embed
-from bot.utils.settings import logger
 from interactions import (
     AutocompleteContext,
     Extension,
     OptionType,
+    SlashContext,
     slash_command,
     slash_option,
-    SlashContext,
 )
+
+from bot.utils.db import get_choices
+from bot.utils.embed import build_embed
+from bot.utils.settings import logger
 
 
 class Skin(Extension):
     """Represents the /skin command.
 
-    Retrieves all info for a Counter-Strike skin, handles choice autocomplete, and calls the Discord embeded message.
+    Retrieves all info for a Counter-Strike skin, handles
+    choice autocomplete, and calls the Discord embeded message.
     """
 
     @slash_command(name="skin", description="View a Counter-Strike Skin")
@@ -44,11 +46,15 @@ class Skin(Extension):
     async def skin_autocomplete(self, ctx: AutocompleteContext):
         """Get autocomplete choices for Counter-Strike skins.
 
-        Searches the skins table for names that match the user's input of a Counter-Strike skin.
+        Searches the skins table for names that match
+        the user's input of a Counter-Strike skin.
         """
 
         input = ctx.input_text or ""
         choices = await get_choices("skins", input)
         await ctx.send(
-            choices=[{"name": choice.name, "value": choice.name} for choice in choices]
+            choices=[
+                {"name": choice.name, "value": choice.name}
+                for choice in choices
+            ]
         )

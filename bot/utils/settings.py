@@ -3,10 +3,11 @@
 Defines the settings used for the database and bot.
 """
 
-from bot.utils.log import init_logger
 from os import path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from bot.utils.log import init_logger
 
 logger = init_logger(path.basename(__file__))
 
@@ -23,7 +24,6 @@ class Settings(BaseSettings):
         db_name (str): The PostgreSQL database name.
         db_user (str): The PostgreSQL database username.
         db_host (str): The PostgreSQL database hostname.
-        db_pass (str): The PostgreSQL database password.
     """
 
     app_id: str
@@ -32,7 +32,6 @@ class Settings(BaseSettings):
     db_name: str
     db_user: str
     db_host: str
-    db_pass: str
 
     model_config = SettingsConfigDict(env_file=".env")
 

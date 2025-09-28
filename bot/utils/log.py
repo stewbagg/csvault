@@ -17,9 +17,15 @@ class CustomFormatter(logging.Formatter):
     reset = "\x1b[0m"
 
     FORMATS = {
-        logging.INFO: grey + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
-        logging.WARNING: yellow + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
-        logging.ERROR: red + "[%(asctime)s][%(levelname)7s] %(message)s" + reset,
+        logging.INFO: grey
+        + "[%(asctime)s][%(levelname)7s] %(message)s"
+        + reset,
+        logging.WARNING: yellow
+        + "[%(asctime)s][%(levelname)7s] %(message)s"
+        + reset,
+        logging.ERROR: red
+        + "[%(asctime)s][%(levelname)7s] %(message)s"
+        + reset,
         logging.CRITICAL: bold_red
         + "[%(asctime)s][%(levelname)7s] %(message)s"
         + reset,
@@ -33,7 +39,8 @@ class CustomFormatter(logging.Formatter):
 
 def get_logger(name):
     """Function to get a logger
-    Useful for modules that have already initialized a logger, such as discord.py
+    Useful for modules that have already
+    initialized a logger, such as discord.py
     """
     __logger = logging.getLogger(name)
     __logger.setLevel(logging.INFO)

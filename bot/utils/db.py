@@ -3,11 +3,13 @@
 Defines database connection, handling, and queries used for the bot.
 """
 
-from bot.utils.settings import settings
 from datetime import date
-from psycopg_pool import AsyncConnectionPool
+
 from psycopg.rows import class_row
+from psycopg_pool import AsyncConnectionPool
 from pydantic import BaseModel
+
+from bot.utils.settings import settings
 
 
 def conninfo():
@@ -23,7 +25,6 @@ def conninfo():
     dbname={settings.db_name}
     user={settings.db_user}
     host={settings.db_host}
-    password={settings.db_pass}
     """
 
 
@@ -81,11 +82,12 @@ pool = AsyncConnectionPool(conninfo=conninfo(), open=False)
 async def get_choices(category: str, input: str) -> list[Choice]:
     """Get matching choices from the database.
 
-    Searches the specified category table for names that match the user's input.
+    Searches the specified category table
+    for names that match the user's input.
 
     Args:
-        category (str): The category to search in ("cases", "collections", "packages",
-        "skins").
+        category (str): The category to search in
+        ("agents", "cases", "collections", "packages", "skins").
         input (str): The user's search input.
 
     Returns:
@@ -97,6 +99,17 @@ async def get_choices(category: str, input: str) -> list[Choice]:
         conn.cursor(row_factory=class_row(Choice)) as cur,
     ):
         match category:
+            case "agents":
+                await cur.execute(
+                    """
+                    SELECT
+                    name
+                    FROM agents
+                    WHERE agents.name
+                    ILIKE %s LIMIT 25
+                    """,
+                    (f"%{input}%",),
+                )
             case "cases":
                 await cur.execute(
                     """
@@ -150,8 +163,8 @@ async def get_items(category: str, id: int) -> list[Item]:
     Retrieves item names and grades from the database for the given category.
 
     Args:
-        category (str): The category to search in ("cases", "collections", "packages",
-        "skins").
+        category (str): The category to search in
+        ("agents", "cases", "collections", "packages", "skins").
         id (int): The database ID of the category entry.
 
     Returns:
@@ -163,6 +176,17 @@ async def get_items(category: str, id: int) -> list[Item]:
         conn.cursor(row_factory=class_row(Item)) as cur,
     ):
         match category:
+            case "agents":
+                await cur.execute(
+                    """
+                    SELECT
+                    name,
+                    grade
+                    FROM agents
+                    WHERE agents.id = %s
+                    """,
+                    (id,),
+                )
             case "cases":
                 await cur.execute(
                     """
@@ -174,7 +198,18 @@ async def get_items(category: str, id: int) -> list[Item]:
                     """,
                     (id,),
                 )
-            case "collections" | "packages":
+            case "collections":
+                await cur.execute(
+                    """
+                    SELECT
+                    name,
+                    grade
+                    FROM skins
+                    WHERE collection_id = %s
+                    """,
+                    (id,),
+                )
+            case "packages":
                 await cur.execute(
                     """
                     SELECT
@@ -196,7 +231,7 @@ async def get_items(category: str, id: int) -> list[Item]:
                     """,
                     (id,),
                 )
-        if category == "skins":
+        if category in ("agents", "skins"):
             return await cur.fetchone()
         else:
             return await cur.fetchall()
@@ -208,8 +243,8 @@ async def get_metadata(category: str, name: str) -> Metadata | None:
     Retrieves metadata from the database for the given category and item name.
 
     Args:
-        category (str): The category to search in ("cases", "collections", "packages",
-        "skins").
+        category (str): The category to search in
+        ("agents", "cases", "collections", "packages", "skins").
         name (str): The name of the item.
 
     Returns:
@@ -221,16 +256,33 @@ async def get_metadata(category: str, name: str) -> Metadata | None:
         conn.cursor(row_factory=class_row(Metadata)) as cur,
     ):
         match category:
+            case "agents":
+                await cur.execute(
+                    """
+                    SELECT
+                    agents.id,
+                    agents.icon_url,
+                    agents.collection_id,
+                    collections.name AS collection_name,
+                    collections.release_date AS release_date,
+                    collections.icon_url AS collection_icon_url
+                    FROM agents
+                    LEFT JOIN collections
+                    ON agents.collection_id = collections.id
+                    WHERE agents.name = %s
+                    """,
+                    (name,),
+                )
             case "cases":
                 await cur.execute(
                     """
                     SELECT
                     cases.id,
-                    cases.release_date,
                     cases.icon_url,
                     cases.collection_id,
                     collections.name AS collection_name,
-                    collections.icon_url AS collection_icon_url
+                    collections.icon_url AS collection_icon_url,
+                    collections.release_date AS release_date
                     FROM cases
                     LEFT JOIN collections
                     ON cases.collection_id = collections.id
@@ -246,7 +298,8 @@ async def get_metadata(category: str, name: str) -> Metadata | None:
                     collections.release_date,
                     collections.icon_url,
                     cases.name AS case_name,
-                    STRING_AGG(packages.name, '\n' ORDER BY packages.release_date)
+                    STRING_AGG(packages.name, '\n'
+                    ORDER BY packages.release_date)
                     AS packages
                     FROM collections
                     LEFT JOIN cases
@@ -291,7 +344,8 @@ async def get_metadata(category: str, name: str) -> Metadata | None:
                     collections.name AS collection_name,
                     collections.release_date AS release_date,
                     collections.icon_url AS collection_icon_url,
-                    STRING_AGG(packages.name, '\n' ORDER BY packages.release_date)
+                    STRING_AGG(packages.name, '\n'
+                    ORDER BY packages.release_date)
                     AS packages
                     FROM skins
                     LEFT JOIN collections

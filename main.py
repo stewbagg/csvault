@@ -3,14 +3,18 @@
 Defines the startup and command list for the bot.
 """
 
-from bot.utils.settings import settings, logger
-from bot.utils.db import pool
-from interactions import Activity, ActivityType, Client, errors, listen
 from os import listdir
+
+from interactions import Activity, ActivityType, Client, errors, listen
+
+from bot.utils.db import pool
+from bot.utils.settings import logger, settings
 
 bot = Client(
     token=f"{settings.token}",
-    activity=Activity(name="Counter-Strike Data Hoarder", type=ActivityType.PLAYING),
+    activity=Activity(
+        name="Counter-Strike Data Hoarder", type=ActivityType.PLAYING
+    ),
 )
 
 
