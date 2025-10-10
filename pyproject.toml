@@ -1,0 +1,26 @@
+[project]
+name = "csvault"
+version = "0.1.0"
+description = "A Discord bot for Counter-Strike items."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+	"discord-py-interactions",
+	"pydantic-settings",
+	"pytest",
+	"psycopg"
+]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+
+[tool.ruff]
+line-length = 79 # PEP 8 Standard
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = 72 # PEP 8 Standard
